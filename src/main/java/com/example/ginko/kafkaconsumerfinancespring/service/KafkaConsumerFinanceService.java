@@ -20,8 +20,8 @@ public class KafkaConsumerFinanceService {
         System.out.println("Finance consumed message: " + consumedMessage);
 
         String replyMessage = "Processed: " + consumedMessage;
-        kafkaTemplate.send("orders-confirmations", replyMessage);
-        System.out.println("Finance sent confirmation 'my-reply-topic': " + replyMessage);
+        kafkaTemplate.send("orders-confirmation", replyMessage);
+        System.out.println("Finance sent confirmation 'orders-confirmation': " + replyMessage);
     }
 
 //    @KafkaListener(topics = "orders", groupId = "finance-group")

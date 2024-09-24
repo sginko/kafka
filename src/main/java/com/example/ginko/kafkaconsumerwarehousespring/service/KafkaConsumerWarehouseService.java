@@ -11,14 +11,14 @@ import org.springframework.stereotype.Service;
 public class KafkaConsumerWarehouseService {
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    @KafkaListener(topics = "orders", groupId = "finance-group")
+    @KafkaListener(topics = "orders", groupId = "warehouse-group")
     public void consume(ConsumerRecord<String, String> record) {
         String consumedMessage = record.value();
         System.out.println("Warehouse consumed message: " + consumedMessage);
 
         String replyMessage = "Processed: " + consumedMessage;
-        kafkaTemplate.send("orders-confirmations", replyMessage);
-        System.out.println("Warehouse sent confirmation 'orders': " + replyMessage);
+        kafkaTemplate.send("orders-confirmation", replyMessage);
+        System.out.println("Warehouse sent confirmation 'orders-confirmation': " + replyMessage);
     }
 
 //    @KafkaListener(topics = "orders", groupId = "warehouse-group")
