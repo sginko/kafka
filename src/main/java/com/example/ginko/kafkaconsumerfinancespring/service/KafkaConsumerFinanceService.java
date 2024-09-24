@@ -6,13 +6,11 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-
 @AllArgsConstructor
 @Service
 public class KafkaConsumerFinanceService {
     //    private static final Logger logger = LoggerFactory.getLogger(KafkaConsumerFinanceService.class);
     private final KafkaTemplate<String, String> kafkaTemplate;
-
 
     @KafkaListener(topics = "orders", groupId = "finance-group")
     public void consume(ConsumerRecord<String, String> record) {
