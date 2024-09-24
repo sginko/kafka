@@ -1,7 +1,10 @@
 package com.example.ginko.kafkaconsumerfinancespring.service;
 
+import com.example.ginko.kafkaconsumerfinancespring.dto.ConsumerFinanceRequestDto;
+import com.example.ginko.kafkaconsumerfinancespring.dto.ConsumerFinanceResponseDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -9,33 +12,19 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 @Service
 public class KafkaConsumerFinanceService {
-    //    private static final Logger logger = LoggerFactory.getLogger(KafkaConsumerFinanceService.class);
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ObjectMapper objectMapper;
 
     @KafkaListener(topics = "orders", groupId = "finance-group")
-    public void consume(ConsumerRecord<String, String> record) {
-        String consumedMessage = record.value();
-        System.out.println("Finance consumed message: " + consumedMessage);
+    public void consume(String orderJson) throws JsonProcessingException {
+        ConsumerFinanceRequestDto consumerFinanceRequestDto = objectMapper.readValue(orderJson, ConsumerFinanceRequestDto.class);
+        String orderId = consumerFinanceRequestDto.getOrderId();
+        String prodOrder = consumerFinanceRequestDto.getProdOrder();
+        System.out.println("Finance consumed message: " + prodOrder);
 
-        String replyMessage = "Processed: " + consumedMessage;
-        kafkaTemplate.send("orders-confirmation", replyMessage);
-        System.out.println("Finance sent confirmation 'orders-confirmation': " + replyMessage);
+        ConsumerFinanceResponseDto confirmation = new ConsumerFinanceResponseDto(orderId, "Finance", "Processed");
+        String confirmationJson = objectMapper.writeValueAsString(confirmation);
+        kafkaTemplate.send("orders-confirmation", confirmationJson);
+        System.out.println("Finance sent confirmation: " + confirmationJson);
     }
-
-//    @KafkaListener(topics = "orders", groupId = "finance-group")
-//    public void consume(ConsumerRecord<String, String> record) {
-//        System.out.println("Finance consumed message: " + record.value());
-//        logger.info("Consumed message: {}", record.value());
-//
-//        String confirmationMessage = "Finance confirmation: " + record.value();
-//        sendConfirmation(confirmationMessage);
-//
-//    }
-//
-//    private void sendConfirmation(String message) {
-//        ProducerRecord<String, String> record = new ProducerRecord<>("orders-confirmation", message);
-//        kafkaTemplate.send(record);
-//        kafkaTemplate.send("orders-confirmations", message);
-//        System.out.println("Finance sent confirmation: " + message);
-//    }
 }
