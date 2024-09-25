@@ -11,4 +11,6 @@ public class KafkaProducerApplication {
         app.setAdditionalProfiles("kafkaproducer");
         app.run(args);
     }
+
+    //java -jar target/your-app-name.jar --server.port=8081
 }
