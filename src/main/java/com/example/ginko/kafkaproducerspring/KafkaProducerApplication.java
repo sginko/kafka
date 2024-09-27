@@ -12,5 +12,5 @@ public class KafkaProducerApplication {
         app.run(args);
     }
 
-    //java -jar target/your-app-name.jar --server.port=8081
+    //java -jar target/kafka-0.0.1-SNAPSHOT.jar --server.port=8081
 }
