@@ -22,13 +22,13 @@ public class ProducerEntity {
 
     private String financeConfirmation;
 
-//    @Version
-//    private Integer version;
+    @Version
+    private Integer version;
 
     public ProducerEntity(String prodOrder, String warehouseConfirmation, String financeConfirmation) {
         this.prodOrder = prodOrder;
         this.warehouseConfirmation = warehouseConfirmation;
         this.financeConfirmation = financeConfirmation;
-//        this.version = 0;
+        this.version = 0;
     }
 }
